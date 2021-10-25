@@ -6,5 +6,5 @@ plugins:
     default: "https://open.kickbox.com/v1/disposable/"
     client: true
   plugin_check_email_debug_log:
-   default: false
+    default: false
     client: true
