@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: plugin-check-email
 # about:  Check disposable emails on sign up against the free API provided by kickbox.com
-# version: 0.0.2
+# version: 0.0.21
 # authors: Terrapop, Neo
 # url: https://github.com/unixneo/plugin-check-email.git
 
@@ -22,7 +22,6 @@ after_initialize do
             return unless record.should_validate_email_address?
             if email_checker(value)
                 record.errors.add(attribute, I18n.t(:'user.email.not_allowed'))
-                Rails.logger.debug("Check email plugin: user email prohibited: #{value}.")
             end
         end
 
@@ -42,6 +41,7 @@ after_initialize do
                     Rails.logger.warn("Check email plugin: Json response does not contain key 'disposable'")
                     return false
                 else
+                    Rails.logger.debug("Check email plugin: user email disposable: #{parsed_json['disposable']}.")
                     return parsed_json['disposable']
                 end
             else
