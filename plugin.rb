@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: plugin-check-email
 # about:  Check disposable emails on sign up against the free API provided by kickbox.com
-# version: 0.0.21
+# version: 0.0.22
 # authors: Terrapop, Neo
 # url: https://github.com/unixneo/plugin-check-email.git
 
