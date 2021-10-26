@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: plugin-check-email
 # about:  Check disposable emails on sign up against the free API provided by kickbox.com
-# version: 0.0.25
+# version: 0.0.27
 # authors: Terrapop, Neo
 # url: https://github.com/unixneo/plugin-check-email.git
 
@@ -54,7 +54,7 @@ after_initialize do
                     out_text = "A. plugin-check-email: #{email} disposable: #{parsed_json['disposable']} #{Time.now}\n"
                     IO.write(tmp_file, out_text, mode:"a")
                   end
-                    email_logger.debug("Check email plugin: user email disposable: #{parsed_json['disposable']}.")
+                    email_logger.info("Check email plugin: user email disposable: #{parsed_json['disposable']}.")
                     return parsed_json['disposable']
                 end
             else
