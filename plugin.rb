@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: plugin-check-email
 # about:  Check disposable emails on sign up against the free API provided by kickbox.com
-# version: 0.0.23
+# version: 0.0.25
 # authors: Terrapop, Neo
 # url: https://github.com/unixneo/plugin-check-email.git
 
@@ -39,23 +39,26 @@ after_initialize do
           else
             tmp_file = "#{Rails.root}/plugin-check-email.log"
           end
+
+          email_logger = Logger.new('plugin-check-email-rails.log')
+
             uri = URI(SiteSetting.plugin_check_email_api_url+email)
             response = Net::HTTP.get(uri)
             if valid_json?(response)
                 parsed_json = JSON.parse(response)
                 if parsed_json['disposable'].nil?
-                    Rails.logger.warn("Check email plugin: Json response does not contain key 'disposable'")
+                    email_logger.warn("Check email plugin: Json response does not contain key 'disposable'")
                     return false
                 else
                   if SiteSetting.plugin_check_email_debug_log
                     out_text = "A. plugin-check-email: #{email} disposable: #{parsed_json['disposable']} #{Time.now}\n"
                     IO.write(tmp_file, out_text, mode:"a")
                   end
-                    Rails.logger.debug("Check email plugin: user email disposable: #{parsed_json['disposable']}.")
+                    email_logger.debug("Check email plugin: user email disposable: #{parsed_json['disposable']}.")
                     return parsed_json['disposable']
                 end
             else
-                Rails.logger.warn("Check email plugin: No valid json response, check your API endpoint")
+                email_logger.warn("Check email plugin: No valid json response, check your API endpoint")
                 return false
             end
         end
