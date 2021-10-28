@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 # name: plugin-check-email
 # about:  Check disposable emails on sign up against the free API provided by kickbox.com
-# version: 0.0.28
+# version: 0.0.29
 # authors: Terrapop, Neo
 # url: https://github.com/unixneo/plugin-check-email.git
 
 require 'net/http'
 require 'json'
-require 'logger'
+#require 'logger'
 
 enabled_site_setting :plugin_check_email_enabled
 
@@ -47,18 +47,18 @@ after_initialize do
             if valid_json?(response)
                 parsed_json = JSON.parse(response)
                 if parsed_json['disposable'].nil?
-                    @email_logger.warn("Check email plugin: Json response does not contain key 'disposable'")
+                    #@email_logger.warn("Check email plugin: Json response does not contain key 'disposable'")
                     return false
                 else
                   if SiteSetting.plugin_check_email_debug_log
                     out_text = "A. plugin-check-email: #{email} disposable: #{parsed_json['disposable']} #{Time.now}\n"
                     IO.write(tmp_file, out_text, mode:"a")
                   end
-                    @email_logger.info("Check email plugin: user email disposable: #{parsed_json['disposable']}.")
+                    #@email_logger.info("Check email plugin: user email disposable: #{parsed_json['disposable']}.")
                     return parsed_json['disposable']
                 end
             else
-                @email_logger.warn("Check email plugin: No valid json response, check your API endpoint")
+                #@email_logger.warn("Check email plugin: No valid json response, check your API endpoint")
                 return false
             end
         end
@@ -67,7 +67,7 @@ after_initialize do
     class ::User
       validate :plugin_check_email
       def plugin_check_email
-        @email_logger = Logger.new('plugin-check-email-rails.log')
+        #@email_logger = Logger.new('plugin-check-email-rails.log')
         DiscoursePluginCheckEmail::EmailValidator.new(attributes: :email).validate_each(self, :email, email)
       end
     end
